@@ -5,8 +5,6 @@ from core.models import *
 from .serializers import *
 from rest_framework.views import APIView
 
-# Create your views here.
-
 class CreateMessage(mixins.CreateModelMixin, mixins.ListModelMixin, generics.GenericAPIView):
     queryset = SenderMessage.objects.all()
     serializer_class = MessageSerializer
@@ -17,8 +15,7 @@ class CreateMessage(mixins.CreateModelMixin, mixins.ListModelMixin, generics.Gen
     def post(self, request, *args, **kwargs):
         res = self.create(request, *args, **kwargs)
         if res.status_code == 201:
-            return Response({'msg': 'successfully created'}, status=status.HTTP_201_CREATED)
-
+            return Response({'msg': 'Successfully Created'}, status=status.HTTP_201_CREATED)
 
 class CreateDriver(mixins.CreateModelMixin, mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Driver.objects.all()
@@ -30,9 +27,8 @@ class CreateDriver(mixins.CreateModelMixin, mixins.ListModelMixin, generics.Gene
     def post(self, request, *args, **kwargs):
         res = self.create(request, *args, **kwargs)
         if res.status_code == 201:
-            return Response({'msg': 'successfully created'}, status=status.HTTP_201_CREATED)
-
-
+            return Response({'msg': 'Successfully Created'}, status=status.HTTP_201_CREATED)
+        
 class ListDriver(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
 
     queryset = Driver.objects.all()
@@ -47,7 +43,6 @@ class ListDriver(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.Dest
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-
 class ActiveHospital(APIView):
 
     def get(self, request, format = None):
@@ -58,20 +53,18 @@ class ActiveHospital(APIView):
             serializer = HospitalSerializer(hospital)
             Hospitales.append(serializer.data)
         return Response(Hospitales, status=status.HTTP_200_OK)
-
-
-
+    
+    
 class HospitalMessageView(APIView):
     def get(self, request, pk, format = None):
         try:
             message = SenderMessage.objects.filter(hospital = pk)
         except:
-            return Response({"msg" : "No message is found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"msg" : "No Message is found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = MessageSerializer(message, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
+    
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny, )
 
@@ -94,7 +87,6 @@ class LoginView(APIView):
             res.append({"drivers": driverserialized.data})
             return Response(res, status=status.HTTP_200_OK)
 
-
 class LoginViewDriver(APIView):
     permission_classes = (permissions.AllowAny, )
 
@@ -109,7 +101,7 @@ class LoginViewDriver(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AssignMessage(APIView):
-
+    
     def post(self, request, format = None):
         try: 
             driver = Driver.objects.get(id = request.data['id'])
@@ -127,8 +119,6 @@ class AssignMessage(APIView):
                 serialized.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # SenderMessage.objects.filter(id = driver.sendermessage).update(isactive = False)
-        # return Response({"msg": "Successfully assign message to driver"}, status=status.HTTP_202_ACCEPTED)
         
 
 

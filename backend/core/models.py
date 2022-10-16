@@ -10,17 +10,14 @@ class Hospital(models.Model):
     longitude = models.FloatField(blank = True, null = True)
     phonenumber = models.CharField(max_length = 13, blank = True, null = True)
 
-
     def __str__(self):
         return f"{self.name}"
-
 
 class Role(models.Model):
     rolename = models.CharField(max_length = 128, blank = True, null = True)
 
     def __str__(self):
         return f"{self.rolename}"
-
 
 class SenderMessage(models.Model):
     hospital = models.ForeignKey(Hospital, on_delete = models.CASCADE)
@@ -56,7 +53,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
-
 
 class Driver(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank = True, null = True)
